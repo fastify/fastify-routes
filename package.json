@@ -1,0 +1,38 @@
+{
+  "name": "fastify-routes",
+  "version": "2.0.0",
+  "description": "A plugin for Fastify that provides a map of routes",
+  "main": "plugin.js",
+  "scripts": {
+    "test": "tap --cov test/**/*.test.js",
+    "lint": "standard | snazzy"
+  },
+  "precommit": [
+    "lint",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/fastify/fastify-routes.git"
+  },
+  "keywords": [
+    "fastify",
+    "oracle"
+  ],
+  "author": "Cemre Mengu <cemremengu@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fastify/fastify-routes/issues"
+  },
+  "homepage": "https://github.com/fastify/fastify-routes#readme",
+  "devDependencies": {
+    "fastify": "^1.11.2",
+    "pre-commit": "^1.2.2",
+    "snazzy": "^8.0.0",
+    "standard": "^12.0.1",
+    "tap": "^12.0.1"
+  },
+  "dependencies": {
+    "fastify-plugin": "^1.2.0"
+  }
+}
