@@ -6,9 +6,9 @@ function fastifyRoutes (fastify, options, next) {
   fastify.decorate('routes', new Map())
 
   fastify.addHook('onRoute', (routeOptions) => {
-    const { method, schema, url, logLevel, prefix, bodyLimit } = routeOptions
+    const { method, schema, url, logLevel, prefix, bodyLimit, handler } = routeOptions
     const key = method.toLowerCase()
-    const route = { method, schema, url, logLevel, prefix, bodyLimit }
+    const route = { method, schema, url, logLevel, prefix, bodyLimit, handler }
 
     if (fastify.routes.has(url)) {
       let current = fastify.routes.get(url)

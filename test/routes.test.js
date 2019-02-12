@@ -4,6 +4,10 @@ const test = require('tap').test
 const Fastify = require('fastify')
 const plugin = require('../plugin')
 
+function handler (_, reply) {
+  reply.send({ hello: 'world' })
+}
+
 const routeA = function (fastify, opts, next) {
   const options = {
     schema: {
@@ -20,7 +24,7 @@ const routeA = function (fastify, opts, next) {
     logLevel: 'warn'
   }
 
-  fastify.get('/hello/:world', options, function (request, reply) { reply.send({ hello: 'world' }) })
+  fastify.get('/hello/:world', options, handler)
 
   next()
 }
@@ -29,13 +33,13 @@ const routeB = function (fastify, opts, next) {
   fastify.post('/hello/:world', {
     bodyLimit: 2000,
     logLevel: 'info'
-  }, function (request, reply) { reply.send({ hello: 'world' }) })
+  }, handler)
 
   next()
 }
 
 test('should correctly map routes', (t) => {
-  t.plan(12)
+  t.plan(14)
 
   const fastify = Fastify()
 
@@ -52,6 +56,7 @@ test('should correctly map routes', (t) => {
     t.equal(fastify.routes.get('/v1/hello/:world').get.logLevel, 'warn')
     t.equal(fastify.routes.get('/v1/hello/:world').get.prefix, '/v1')
     t.equal(fastify.routes.get('/v1/hello/:world').get.bodyLimit, 1000)
+    t.equal(fastify.routes.get('/v1/hello/:world').get.handler, handler)
     t.deepEqual(fastify.routes.get('/v1/hello/:world').get.schema, {
       response: {
         200: {
@@ -70,5 +75,6 @@ test('should correctly map routes', (t) => {
     t.equal(fastify.routes.get('/v1/hello/:world').post.logLevel, 'info')
     t.equal(fastify.routes.get('/v1/hello/:world').post.prefix, '/v1')
     t.equal(fastify.routes.get('/v1/hello/:world').post.bodyLimit, 2000)
+    t.equal(fastify.routes.get('/v1/hello/:world').post.handler, handler)
   })
 })
