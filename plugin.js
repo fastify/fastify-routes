@@ -7,15 +7,19 @@ function fastifyRoutes (fastify, options, next) {
 
   fastify.addHook('onRoute', (routeOptions) => {
     const { method, schema, url, logLevel, prefix, bodyLimit, handler } = routeOptions
-    const key = method.toLowerCase()
-    const route = { method, schema, url, logLevel, prefix, bodyLimit, handler }
+    const _method = Array.isArray(method) ? method : [method]
 
-    if (fastify.routes.has(url)) {
-      let current = fastify.routes.get(url)
-      fastify.routes.set(url, Object.assign(current, { [key]: route }))
-    } else {
-      fastify.routes.set(url, { [key]: route })
-    }
+    _method.forEach(method => {
+      const key = method.toLowerCase()
+      const route = { method, schema, url, logLevel, prefix, bodyLimit, handler }
+
+      if (fastify.routes.has(url)) {
+        let current = fastify.routes.get(url)
+        fastify.routes.set(url, Object.assign(current, { [key]: route }))
+      } else {
+        fastify.routes.set(url, { [key]: route })
+      }
+    })
   })
 
   next()

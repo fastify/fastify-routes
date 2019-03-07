@@ -38,8 +38,16 @@ const routeB = function (fastify, opts, next) {
   next()
 }
 
+const routeC = {
+  method: ['GET', 'HEAD'],
+  path: '/foo',
+  handler (req, res) {
+    res.send({ success: true })
+  }
+}
+
 test('should correctly map routes', (t) => {
-  t.plan(14)
+  t.plan(16)
 
   const fastify = Fastify()
 
@@ -47,6 +55,7 @@ test('should correctly map routes', (t) => {
 
   fastify.register(routeA, { prefix: '/v1' })
   fastify.register(routeB, { prefix: '/v1' })
+  fastify.route(routeC)
 
   fastify.ready(err => {
     t.error(err)
@@ -76,5 +85,8 @@ test('should correctly map routes', (t) => {
     t.equal(fastify.routes.get('/v1/hello/:world').post.prefix, '/v1')
     t.equal(fastify.routes.get('/v1/hello/:world').post.bodyLimit, 2000)
     t.equal(fastify.routes.get('/v1/hello/:world').post.handler, handler)
+
+    t.equal(fastify.routes.get('/foo').get.method, 'GET')
+    t.equal(fastify.routes.get('/foo').head.method, 'HEAD')
   })
 })
