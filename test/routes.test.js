@@ -86,7 +86,6 @@ test('should correctly map routes', (t) => {
     t.equal(fastify.routes.get('/v1/hello/:world').post.bodyLimit, 2000)
     t.equal(fastify.routes.get('/v1/hello/:world').post.handler, handler)
 
-
     t.equal(fastify.routes.get('/foo').get.method, 'GET')
     t.equal(fastify.routes.get('/foo').head.method, 'HEAD')
   })
