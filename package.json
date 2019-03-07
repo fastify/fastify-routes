@@ -1,6 +1,6 @@
 {
   "name": "fastify-routes",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A plugin for Fastify that provides a map of routes",
   "main": "plugin.js",
   "scripts": {
