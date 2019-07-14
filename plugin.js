@@ -14,7 +14,7 @@ function fastifyRoutes (fastify, options, next) {
       const route = { method, schema, url, logLevel, prefix, bodyLimit, handler }
 
       if (fastify.routes.has(url)) {
-        let current = fastify.routes.get(url)
+        const current = fastify.routes.get(url)
         fastify.routes.set(url, Object.assign(current, { [key]: route }))
       } else {
         fastify.routes.set(url, { [key]: route })
