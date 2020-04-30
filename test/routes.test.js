@@ -8,18 +8,20 @@ function handler (_, reply) {
   reply.send({ hello: 'world' })
 }
 
+const schema = {
+  response: {
+    200: {
+      type: 'object',
+      properties: {
+        hello: { type: 'string' }
+      }
+    }
+  }
+}
+
 const routeA = function (fastify, opts, next) {
   const options = {
-    schema: {
-      response: {
-        200: {
-          type: 'object',
-          properties: {
-            hello: { type: 'string' }
-          }
-        }
-      }
-    },
+    schema,
     bodyLimit: 1000,
     logLevel: 'warn'
   }
@@ -66,18 +68,7 @@ test('should correctly map routes', (t) => {
     t.equal(fastify.routes.get('/v1/hello/:world').get.prefix, '/v1')
     t.equal(fastify.routes.get('/v1/hello/:world').get.bodyLimit, 1000)
     t.equal(fastify.routes.get('/v1/hello/:world').get.handler, handler)
-    t.deepEqual(fastify.routes.get('/v1/hello/:world').get.schema, {
-      response: {
-        200: {
-          properties: {
-            hello: {
-              type: 'string'
-            }
-          },
-          type: 'object'
-        }
-      }
-    })
+    t.deepEqual(fastify.routes.get('/v1/hello/:world').get.schema, schema)
 
     t.equal(fastify.routes.get('/v1/hello/:world').post.method, 'POST')
     t.equal(fastify.routes.get('/v1/hello/:world').post.url, '/v1/hello/:world')
