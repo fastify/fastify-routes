@@ -4,7 +4,8 @@
   "description": "A plugin for Fastify that provides a map of routes",
   "main": "plugin.js",
   "scripts": {
-    "test": "tap --cov test/**/*.test.js",
+    "test": "npm run lint && npm run unit",
+    "unit": "tap --cov test/**/*.test.js",
     "lint": "standard | snazzy"
   },
   "precommit": [
