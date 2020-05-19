@@ -1,7 +1,7 @@
 # fastify-routes
-[![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-routes.svg)](https://greenkeeper.io/)
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Build Status](https://travis-ci.org/fastify/fastify-routes.svg?branch=master)](https://travis-ci.org/fastify/fastify-routes)
+![CI workflow](https://github.com/fastify/fastify-routes/workflows/CI%20workflow/badge.svg)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 This plugin decorates Fastify instance with `routes` which is a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) of registered routes. Note that you have to register this plugin
 before registering any routes so that it can collect all of them.
