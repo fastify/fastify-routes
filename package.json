@@ -4,9 +4,9 @@
   "description": "A plugin for Fastify that provides a map of routes",
   "main": "plugin.js",
   "scripts": {
-    "test": "npm run lint && npm run unit",
-    "unit": "tap --100 test/**/*.test.js",
-    "lint": "standard | snazzy"
+    "lint": "standard | snazzy",
+    "unit": "tap --100 \"test/**/*.test.js\"",
+    "test": "npm run lint && npm run unit"
   },
   "precommit": [
     "lint",
