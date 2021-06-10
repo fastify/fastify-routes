@@ -48,9 +48,16 @@ const routeC = {
   }
 }
 
-test('should correctly map routes', (t) => {
-  t.plan(16)
+const constrainedRoute = {
+  method: ['GET'],
+  path: '/foo',
+  constraints: { host: 'fastify.io' },
+  handler (req, res) {
+    res.send({ success: true })
+  }
+}
 
+test('should correctly map routes', async (t) => {
   const fastify = Fastify()
 
   fastify.register(plugin)
@@ -58,26 +65,41 @@ test('should correctly map routes', (t) => {
   fastify.register(routeA, { prefix: '/v1' })
   fastify.register(routeB, { prefix: '/v1' })
   fastify.route(routeC)
+  fastify.route(constrainedRoute)
 
-  fastify.ready(err => {
-    t.error(err)
+  await fastify.ready()
 
-    t.equal(fastify.routes.get('/v1/hello/:world').get.method, 'GET')
-    t.equal(fastify.routes.get('/v1/hello/:world').get.url, '/v1/hello/:world')
-    t.equal(fastify.routes.get('/v1/hello/:world').get.logLevel, 'warn')
-    t.equal(fastify.routes.get('/v1/hello/:world').get.prefix, '/v1')
-    t.equal(fastify.routes.get('/v1/hello/:world').get.bodyLimit, 1000)
-    t.equal(fastify.routes.get('/v1/hello/:world').get.handler, handler)
-    t.deepEqual(fastify.routes.get('/v1/hello/:world').get.schema, schema)
+  t.equal(fastify.routes.get('/v1/hello/:world')[0].method, 'GET')
+  t.equal(fastify.routes.get('/v1/hello/:world')[0].url, '/v1/hello/:world')
+  t.equal(fastify.routes.get('/v1/hello/:world')[0].logLevel, 'warn')
+  t.equal(fastify.routes.get('/v1/hello/:world')[0].prefix, '/v1')
+  t.equal(fastify.routes.get('/v1/hello/:world')[0].bodyLimit, 1000)
+  t.equal(fastify.routes.get('/v1/hello/:world')[0].handler, handler)
+  t.same(fastify.routes.get('/v1/hello/:world')[0].schema, schema)
 
-    t.equal(fastify.routes.get('/v1/hello/:world').post.method, 'POST')
-    t.equal(fastify.routes.get('/v1/hello/:world').post.url, '/v1/hello/:world')
-    t.equal(fastify.routes.get('/v1/hello/:world').post.logLevel, 'info')
-    t.equal(fastify.routes.get('/v1/hello/:world').post.prefix, '/v1')
-    t.equal(fastify.routes.get('/v1/hello/:world').post.bodyLimit, 2000)
-    t.equal(fastify.routes.get('/v1/hello/:world').post.handler, handler)
+  t.equal(fastify.routes.get('/v1/hello/:world')[1].method, 'POST')
+  t.equal(fastify.routes.get('/v1/hello/:world')[1].url, '/v1/hello/:world')
+  t.equal(fastify.routes.get('/v1/hello/:world')[1].logLevel, 'info')
+  t.equal(fastify.routes.get('/v1/hello/:world')[1].prefix, '/v1')
+  t.equal(fastify.routes.get('/v1/hello/:world')[1].bodyLimit, 2000)
+  t.equal(fastify.routes.get('/v1/hello/:world')[1].handler, handler)
 
-    t.equal(fastify.routes.get('/foo').get.method, 'GET')
-    t.equal(fastify.routes.get('/foo').head.method, 'HEAD')
+  t.same(fastify.routes.get('/foo')[0].method, ['GET', 'HEAD'])
+  t.equal(fastify.routes.get('/foo')[0].constraints, undefined)
+  t.same(fastify.routes.get('/foo')[1].constraints, { host: 'fastify.io' })
+})
+
+test('should allow other later onRoute handlers to change route options', async (t) => {
+  const fastify = Fastify()
+
+  fastify.register(plugin)
+  fastify.addHook('onRoute', (options) => {
+    options.constraints = { host: 'some-automatic-constraint.com' }
   })
+  fastify.register(routeA)
+
+  await fastify.ready()
+
+  t.equal(fastify.routes.get('/hello/:world')[0].url, '/hello/:world')
+  t.same(fastify.routes.get('/hello/:world')[0].constraints, { host: 'some-automatic-constraint.com' })
 })

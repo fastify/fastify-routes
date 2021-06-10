@@ -6,20 +6,15 @@ function fastifyRoutes (fastify, options, next) {
   fastify.decorate('routes', new Map())
 
   fastify.addHook('onRoute', (routeOptions) => {
-    const { method, schema, url, logLevel, prefix, bodyLimit, handler } = routeOptions
-    const _method = Array.isArray(method) ? method : [method]
+    const { url } = routeOptions
 
-    _method.forEach(method => {
-      const key = method.toLowerCase()
-      const route = { method, schema, url, logLevel, prefix, bodyLimit, handler }
+    let routeListForUrl = fastify.routes.get(url)
+    if (!routeListForUrl) {
+      routeListForUrl = []
+      fastify.routes.set(url, routeListForUrl)
+    }
 
-      if (fastify.routes.has(url)) {
-        const current = fastify.routes.get(url)
-        fastify.routes.set(url, Object.assign(current, { [key]: route }))
-      } else {
-        fastify.routes.set(url, { [key]: route })
-      }
-    })
+    routeListForUrl.push(routeOptions)
   })
 
   next()
