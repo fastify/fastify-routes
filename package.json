@@ -3,6 +3,7 @@
   "version": "3.0.1",
   "description": "A plugin for Fastify that provides a map of routes",
   "main": "plugin.js",
+  "types": "plugin.d.ts",
   "scripts": {
     "lint": "standard | snazzy",
     "unit": "tap --100 \"test/**/*.test.js\"",
@@ -27,6 +28,7 @@
   },
   "homepage": "https://github.com/fastify/fastify-routes#readme",
   "devDependencies": {
+    "@types/node": "^16.10.2",
     "fastify": "^3.17.0",
     "pre-commit": "^1.2.2",
     "snazzy": "^9.0.0",
