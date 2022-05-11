@@ -21,6 +21,6 @@ function fastifyRoutes (fastify, options, next) {
 }
 
 module.exports = fp(fastifyRoutes, {
-  fastify: '>=1.1.0',
+  fastify: '4.x',
   name: 'fastify-routes'
 })
