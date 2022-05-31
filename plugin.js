@@ -22,5 +22,5 @@ function fastifyRoutes (fastify, options, next) {
 
 module.exports = fp(fastifyRoutes, {
   fastify: '4.x',
-  name: 'fastify-routes'
+  name: '@fastify/routes'
 })
