@@ -19,8 +19,7 @@
     "url": "git+ssh://git@github.com/fastify/fastify-routes.git"
   },
   "keywords": [
-    "fastify",
-    "oracle"
+    "fastify"
   ],
   "author": "Cemre Mengu <cemremengu@gmail.com>",
   "license": "MIT",
