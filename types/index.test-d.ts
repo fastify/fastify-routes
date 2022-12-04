@@ -5,7 +5,7 @@ import fastify, {
 } from "fastify";
 import { expectAssignable, expectError, expectType } from "tsd";
 
-import fastifyRoutes, { FastifyRoutes } from "../../";
+import fastifyRoutes, { FastifyRoutes } from "..";
 
 
 

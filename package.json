@@ -2,8 +2,8 @@
   "name": "@fastify/routes",
   "version": "4.0.0",
   "description": "A plugin for Fastify that provides a map of routes",
-  "main": "plugin.js",
-  "types": "plugin.d.ts",
+  "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "lint": "standard | snazzy",
     "test": "npm run test:unit && npm run test:typescript",
@@ -39,9 +39,6 @@
   },
   "dependencies": {
     "fastify-plugin": "^4.0.0"
-  },
-  "tsd": {
-    "directory": "test/types"
   },
   "publishConfig": {
     "access": "public"
