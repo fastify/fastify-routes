@@ -24,3 +24,5 @@ module.exports = fp(fastifyRoutes, {
   fastify: '4.x',
   name: '@fastify/routes'
 })
+module.exports.default = fastifyRoutes
+module.exports.fastifyRoutes = fastifyRoutes
