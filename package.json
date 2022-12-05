@@ -2,13 +2,13 @@
   "name": "@fastify/routes",
   "version": "4.0.0",
   "description": "A plugin for Fastify that provides a map of routes",
-  "main": "plugin.js",
-  "types": "plugin.d.ts",
+  "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "lint": "standard | snazzy",
-    "unit": "tap --100 \"test/**/*.test.js\"",
-    "test": "npm run lint && npm run unit && npm run typescript",
-    "typescript": "tsd"
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:unit": "tap",
+    "test:typescript": "tsd"
   },
   "precommit": [
     "lint",
@@ -39,10 +39,11 @@
   "dependencies": {
     "fastify-plugin": "^4.0.0"
   },
-  "tsd": {
-    "directory": "test/types"
-  },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }
