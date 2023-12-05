@@ -6,6 +6,8 @@
 
 This plugin decorates a Fastify instance with `routes`, which is a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) of registered routes. Note that you have to register this plugin before registering any routes so that it can collect all of them.
 
+Note also that current versions of Fastify define plugin registration as async, so you have to ensure that registration completes before creating any routes.  See the examples below.
+
 ## Data Structure
 
 The `fastify.routes` Map has a key for each path any route has been registered, which points to an array of routes registered on that path. There can be more than one route for a given path if there are multiple routes added with different methods or different constraints.
@@ -40,36 +42,72 @@ The `fastify.routes` Map has a key for each path any route has been registered, 
 ## Example
 
 ```js
-const fastify = require('fastify')()
+const fastify = require("fastify")();
 
-fastify.register(require('@fastify/routes'))
+fastify.register(require("@fastify/routes")).then(() => {
+  fastify.get("/hello", {}, (request, reply) => {
+    reply.send({ hello: "world" });
+  });
 
-fastify.get('/hello', {}, (request, reply) => {
-  reply.send({ hello: 'world' })
-})
+  fastify.listen({ port: 3000 }, (err, address) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(fastify.routes);
+    /* will output a Map with entries:
+    {
+      '/hello': [
+        {
+          method: 'GET',
+          url: '/hello',
+          schema: Object,
+          handler: <Function>,
+          prefix: <String>,
+          logLevel: <String>,
+          bodyLimit: <Number>
+        }
+      ]
+    }
+    */
+  });
+});
+```
 
-fastify.listen({ port: 3000 }, (err, address) => {
-  if (err) {
-    console.error(err)
-    return
-  }
-  console.log(fastify.routes)
-  /* will output a Map with entries:
-  {
-    '/hello': [
-      {
-        method: 'GET',
-        url: '/hello',
-        schema: Object,
-        handler: <Function>,
-        prefix: <String>,
-        logLevel: <String>,
-        bodyLimit: <Number>
-      }
-    ]
-  }
-  */
-})
+or in ES 2017 `await` style:
+
+```js
+const fastify = require("fastify")();
+
+(async () => {
+  await fastify.register(require("@fastify/routes"));
+  fastify.get("/hello", {}, (request, reply) => {
+    reply.send({ hello: "world" });
+  });
+
+  fastify.listen({ port: 3000 }, (err, address) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(fastify.routes);
+    /* will output a Map with entries:
+    {
+      '/hello': [
+        {
+          method: 'GET',
+          url: '/hello',
+          schema: Object,
+          handler: <Function>,
+          prefix: <String>,
+          logLevel: <String>,
+          bodyLimit: <Number>
+        }
+      ]
+    }
+    */
+  });
+})();
 ```
 
 ## License
