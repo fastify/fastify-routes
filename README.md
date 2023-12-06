@@ -4,9 +4,7 @@
 [![NPM version](https://img.shields.io/npm/v/@fastify/routes.svg?style=flat)](https://www.npmjs.com/package/@fastify/routes)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
-This plugin decorates a Fastify instance with `routes`, which is a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) of registered routes. Note that you have to register this plugin before registering any routes so that it can collect all of them.
-
-Note also that current versions of Fastify define plugin registration as async, so you have to ensure that registration completes before creating any routes.  See the examples below.
+This plugin decorates a Fastify instance with `routes`, which is a [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) of registered routes. Note that you have to await the register of this plugin before registering any routes so that it can collect all of them.
 
 ## Data Structure
 
@@ -40,41 +38,6 @@ The `fastify.routes` Map has a key for each path any route has been registered, 
 ```
 
 ## Example
-
-```js
-const fastify = require("fastify")();
-
-fastify.register(require("@fastify/routes")).then(() => {
-  fastify.get("/hello", {}, (request, reply) => {
-    reply.send({ hello: "world" });
-  });
-
-  fastify.listen({ port: 3000 }, (err, address) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
-    console.log(fastify.routes);
-    /* will output a Map with entries:
-    {
-      '/hello': [
-        {
-          method: 'GET',
-          url: '/hello',
-          schema: Object,
-          handler: <Function>,
-          prefix: <String>,
-          logLevel: <String>,
-          bodyLimit: <Number>
-        }
-      ]
-    }
-    */
-  });
-});
-```
-
-or in ES 2017 `await` style:
 
 ```js
 const fastify = require("fastify")();
