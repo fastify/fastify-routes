@@ -51,7 +51,7 @@ const routeC = {
 const constrainedRoute = {
   method: ['GET'],
   path: '/foo',
-  constraints: { host: 'fastify.io' },
+  constraints: { host: 'fastify.dev' },
   handler (req, res) {
     res.send({ success: true })
   }
@@ -86,7 +86,7 @@ test('should correctly map routes', async (t) => {
 
   t.same(fastify.routes.get('/foo')[0].method, ['GET', 'HEAD'])
   t.equal(fastify.routes.get('/foo')[0].constraints, undefined)
-  t.same(fastify.routes.get('/foo')[1].constraints, { host: 'fastify.io' })
+  t.same(fastify.routes.get('/foo')[1].constraints, { host: 'fastify.dev' })
 })
 
 test('should allow other later onRoute handlers to change route options', async (t) => {
@@ -141,5 +141,5 @@ test('should correctly map routes with automatic HEAD routes', async (t) => {
 
   t.same(fastify.routes.get('/foo')[0].method, ['GET', 'HEAD'])
   t.equal(fastify.routes.get('/foo')[0].constraints, undefined)
-  t.same(fastify.routes.get('/foo')[1].constraints, { host: 'fastify.io' })
+  t.same(fastify.routes.get('/foo')[1].constraints, { host: 'fastify.dev' })
 })
