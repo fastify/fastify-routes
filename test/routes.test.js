@@ -1,6 +1,6 @@
 'use strict'
 
-const test = require('tap').test
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const plugin = require('..')
 
@@ -32,10 +32,14 @@ const routeA = function (fastify, opts, next) {
 }
 
 const routeB = function (fastify, opts, next) {
-  fastify.post('/hello/:world', {
-    bodyLimit: 2000,
-    logLevel: 'info'
-  }, handler)
+  fastify.post(
+    '/hello/:world',
+    {
+      bodyLimit: 2000,
+      logLevel: 'info'
+    },
+    handler
+  )
 
   next()
 }
@@ -69,24 +73,56 @@ test('should correctly map routes', async (t) => {
 
   await fastify.ready()
 
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].method, 'GET')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].url, '/v1/hello/:world')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].logLevel, 'warn')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].prefix, '/v1')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].bodyLimit, 1000)
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].handler, handler)
-  t.same(fastify.routes.get('/v1/hello/:world')[0].schema, schema)
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[0].method, 'GET')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].url,
+    '/v1/hello/:world'
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].logLevel,
+    'warn'
+  )
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[0].prefix, '/v1')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].bodyLimit,
+    1000
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].handler,
+    handler
+  )
+  t.assert.deepStrictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].schema,
+    schema
+  )
 
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].method, 'POST')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].url, '/v1/hello/:world')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].logLevel, 'info')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].prefix, '/v1')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].bodyLimit, 2000)
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].handler, handler)
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[1].method, 'POST')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].url,
+    '/v1/hello/:world'
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].logLevel,
+    'info'
+  )
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[1].prefix, '/v1')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].bodyLimit,
+    2000
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].handler,
+    handler
+  )
 
-  t.same(fastify.routes.get('/foo')[0].method, ['GET', 'HEAD'])
-  t.equal(fastify.routes.get('/foo')[0].constraints, undefined)
-  t.same(fastify.routes.get('/foo')[1].constraints, { host: 'fastify.dev' })
+  t.assert.deepStrictEqual(fastify.routes.get('/foo')[0].method, [
+    'GET',
+    'HEAD'
+  ])
+  t.assert.strictEqual(fastify.routes.get('/foo')[0].constraints, undefined)
+  t.assert.deepStrictEqual(fastify.routes.get('/foo')[1].constraints, {
+    host: 'fastify.dev'
+  })
 })
 
 test('should allow other later onRoute handlers to change route options', async (t) => {
@@ -100,8 +136,13 @@ test('should allow other later onRoute handlers to change route options', async 
 
   await fastify.ready()
 
-  t.equal(fastify.routes.get('/hello/:world')[0].url, '/hello/:world')
-  t.same(fastify.routes.get('/hello/:world')[0].constraints, { host: 'some-automatic-constraint.com' })
+  t.assert.strictEqual(
+    fastify.routes.get('/hello/:world')[0].url,
+    '/hello/:world'
+  )
+  t.assert.deepStrictEqual(fastify.routes.get('/hello/:world')[0].constraints, {
+    host: 'some-automatic-constraint.com'
+  })
 })
 
 test('should correctly map routes with automatic HEAD routes', async (t) => {
@@ -116,30 +157,77 @@ test('should correctly map routes with automatic HEAD routes', async (t) => {
 
   await fastify.ready()
 
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].method, 'GET')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].url, '/v1/hello/:world')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].logLevel, 'warn')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].prefix, '/v1')
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].bodyLimit, 1000)
-  t.equal(fastify.routes.get('/v1/hello/:world')[0].handler, handler)
-  t.same(fastify.routes.get('/v1/hello/:world')[0].schema, schema)
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[0].method, 'GET')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].url,
+    '/v1/hello/:world'
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].logLevel,
+    'warn'
+  )
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[0].prefix, '/v1')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].bodyLimit,
+    1000
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].handler,
+    handler
+  )
+  t.assert.deepStrictEqual(
+    fastify.routes.get('/v1/hello/:world')[0].schema,
+    schema
+  )
 
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].method, 'HEAD')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].url, '/v1/hello/:world')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].logLevel, 'warn')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].prefix, '/v1')
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].bodyLimit, 1000)
-  t.equal(fastify.routes.get('/v1/hello/:world')[1].handler, handler)
-  t.same(fastify.routes.get('/v1/hello/:world')[1].schema, schema)
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[1].method, 'HEAD')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].url,
+    '/v1/hello/:world'
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].logLevel,
+    'warn'
+  )
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[1].prefix, '/v1')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].bodyLimit,
+    1000
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].handler,
+    handler
+  )
+  t.assert.deepStrictEqual(
+    fastify.routes.get('/v1/hello/:world')[1].schema,
+    schema
+  )
 
-  t.equal(fastify.routes.get('/v1/hello/:world')[2].method, 'POST')
-  t.equal(fastify.routes.get('/v1/hello/:world')[2].url, '/v1/hello/:world')
-  t.equal(fastify.routes.get('/v1/hello/:world')[2].logLevel, 'info')
-  t.equal(fastify.routes.get('/v1/hello/:world')[2].prefix, '/v1')
-  t.equal(fastify.routes.get('/v1/hello/:world')[2].bodyLimit, 2000)
-  t.equal(fastify.routes.get('/v1/hello/:world')[2].handler, handler)
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[2].method, 'POST')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[2].url,
+    '/v1/hello/:world'
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[2].logLevel,
+    'info'
+  )
+  t.assert.strictEqual(fastify.routes.get('/v1/hello/:world')[2].prefix, '/v1')
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[2].bodyLimit,
+    2000
+  )
+  t.assert.strictEqual(
+    fastify.routes.get('/v1/hello/:world')[2].handler,
+    handler
+  )
 
-  t.same(fastify.routes.get('/foo')[0].method, ['GET', 'HEAD'])
-  t.equal(fastify.routes.get('/foo')[0].constraints, undefined)
-  t.same(fastify.routes.get('/foo')[1].constraints, { host: 'fastify.dev' })
+  t.assert.deepStrictEqual(fastify.routes.get('/foo')[0].method, [
+    'GET',
+    'HEAD'
+  ])
+  t.assert.strictEqual(fastify.routes.get('/foo')[0].constraints, undefined)
+  t.assert.deepStrictEqual(fastify.routes.get('/foo')[1].constraints, {
+    host: 'fastify.dev'
+  })
 })
