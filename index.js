@@ -2,7 +2,7 @@
 
 const fp = require('fastify-plugin')
 
-function fastifyRoutes (fastify, options, next) {
+function fastifyRoutes (fastify, _options, next) {
   fastify.decorate('routes', new Map())
 
   fastify.addHook('onRoute', (routeOptions) => {
