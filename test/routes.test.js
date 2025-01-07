@@ -19,7 +19,7 @@ const schema = {
   }
 }
 
-const routeA = function (fastify, opts, next) {
+const routeA = function (fastify, _opts, next) {
   const options = {
     schema,
     bodyLimit: 1000,
@@ -31,7 +31,7 @@ const routeA = function (fastify, opts, next) {
   next()
 }
 
-const routeB = function (fastify, opts, next) {
+const routeB = function (fastify, _opts, next) {
   fastify.post(
     '/hello/:world',
     {
@@ -47,7 +47,7 @@ const routeB = function (fastify, opts, next) {
 const routeC = {
   method: ['GET', 'HEAD'],
   path: '/foo',
-  handler (req, res) {
+  handler (_req, res) {
     res.send({ success: true })
   }
 }
@@ -56,7 +56,7 @@ const constrainedRoute = {
   method: ['GET'],
   path: '/foo',
   constraints: { host: 'fastify.dev' },
-  handler (req, res) {
+  handler (_req, res) {
     res.send({ success: true })
   }
 }
